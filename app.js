@@ -99,7 +99,7 @@ function main(shaders)
         const mx = event.offsetX;
         const my = event.offsetY;
 
-        const x = ((mx / canvas.width * 2) - 1);
+        const x = (((mx / canvas.width * 2) - 1)*1.5);
         const y = (((canvas.height - my)/canvas.height * 2) -1);
 
         return vec2(x,y);

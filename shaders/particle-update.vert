@@ -40,7 +40,8 @@ void main() {
    vVelocityOut = vVelocity + accel * uDeltaTime;
       
    if (vAgeOut >= vLife) {
-      // It's all up to you!
+      vAgeOut = 0.0;
+     // vPosition = origin position, passar como uniforme
    }
 
 }
