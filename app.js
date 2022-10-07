@@ -225,6 +225,8 @@ function main(shaders)
 
         gl.useProgram(fieldProgram);
 
+        const uScale = gl.getUniformLocation(fieldProgram, "uScale");
+        gl.uniform2f(uScale, 1.5, 1.5*canvas.height/canvas.width);
         // Setup attributes
         const vPosition = gl.getAttribLocation(fieldProgram, "vPosition"); 
 
