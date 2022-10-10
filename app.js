@@ -7,12 +7,13 @@ let inParticlesBuffer, outParticlesBuffer, quadBuffer;
 // Particle system constants
 
 // Total number of particles
-const N_PARTICLES = 1000;
+const N_PARTICLES = 10000;
 
 let drawPoints = true;
 let drawField = true;
 
 let time = undefined;
+let scale = vec2(1.5, 1.0);
 
 function main(shaders)
 {
@@ -122,8 +123,8 @@ function main(shaders)
 
         for(let i=0; i<nParticles; ++i) {
             // position
-            const x = Math.random()-0.5;
-            const y = Math.random()-0.5;
+            const x = 0.0;
+            const y = 0.0;
 
             data.push(x); data.push(y);
             
@@ -135,8 +136,10 @@ function main(shaders)
             data.push(life);
 
             // velocity
-            data.push(0.1*(Math.random()-0.5));
-            data.push(0.1*(Math.random()-0.5));
+            let angle = Math.random() * 2.0 * Math.PI;
+            let velocity = Math.random() * 0.5;
+            data.push(Math.sin(angle) * velocity);
+            data.push(Math.cos(angle) * velocity);
         }
 
         inParticlesBuffer = gl.createBuffer();
@@ -180,9 +183,11 @@ function main(shaders)
 
     function updateParticles(deltaTime)
     {
+
+
         // Setup uniforms
         const uDeltaTime = gl.getUniformLocation(updateProgram, "uDeltaTime");
-        
+
         gl.useProgram(updateProgram);
 
         gl.uniform1f(uDeltaTime, deltaTime);
@@ -192,6 +197,7 @@ function main(shaders)
         const vAge = gl.getAttribLocation(updateProgram, "vAge");
         const vLife = gl.getAttribLocation(updateProgram, "vLife");
         const vVelocity = gl.getAttribLocation(updateProgram, "vVelocity");
+        
 
         gl.bindBuffer(gl.ARRAY_BUFFER, inParticlesBuffer);
         
@@ -241,6 +247,9 @@ function main(shaders)
     {
 
         gl.useProgram(renderProgram);
+
+        const uScale = gl.getUniformLocation(renderProgram, "uScale");
+        gl.uniform2f(uScale, 1.5, 1.5*canvas.height/canvas.width);
 
         // Setup attributes
         const vPosition = gl.getAttribLocation(renderProgram, "vPosition");
