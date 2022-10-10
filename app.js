@@ -7,13 +7,15 @@ let inParticlesBuffer, outParticlesBuffer, quadBuffer;
 // Particle system constants
 
 // Total number of particles
-const N_PARTICLES = 10000;
+const N_PARTICLES = 100000;
 
 let drawPoints = true;
 let drawField = true;
 
+let vMin = 0.1;
+let vMax = 0.2;
+
 let time = undefined;
-let scale = vec2(1.5, 1.0);
 
 function main(shaders)
 {
@@ -123,8 +125,8 @@ function main(shaders)
 
         for(let i=0; i<nParticles; ++i) {
             // position
-            const x = 0.0;
-            const y = 0.0;
+            const x = Math.random() * 1.5 * 2 - 1.5
+            const y = Math.random() * 1.0 * 2 - 1.0;
 
             data.push(x); data.push(y);
             
@@ -132,14 +134,14 @@ function main(shaders)
             data.push(0.0);
 
             // life
-            const life = 6.0 + Math.random();
+            const life = 5.0 + Math.random();
             data.push(life);
 
             // velocity
             let angle = Math.random() * 2.0 * Math.PI;
-            let velocity = Math.random() * 0.5;
-            data.push(Math.sin(angle) * velocity);
+            let velocity = Math.random() * 0.15;
             data.push(Math.cos(angle) * velocity);
+            data.push(Math.sin(angle) * velocity);
         }
 
         inParticlesBuffer = gl.createBuffer();

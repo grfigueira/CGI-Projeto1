@@ -41,6 +41,7 @@ void main() {
       
    if (vAgeOut >= vLife) {
       vAgeOut = 0.0;
+      vPositionOut = vec2(0.0, 0.0);
      // vPosition = origin position, passar como uniforme
    }
 
