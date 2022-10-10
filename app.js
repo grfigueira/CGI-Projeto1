@@ -12,6 +12,9 @@ const N_PARTICLES = 100000;
 let drawPoints = true;
 let drawField = true;
 
+
+let currentMouse = vec2(0.0, 0.0);
+
 let vMin = 0.1;
 let vMax = 0.2;
 
@@ -50,6 +53,7 @@ function main(shaders)
         gl.viewport(0,0,canvas.width, canvas.height);
     });
 
+
     window.addEventListener("keydown", function(event) {
         console.log(event.key);
         switch(event.key) {
@@ -80,8 +84,11 @@ function main(shaders)
                 drawPoints  = !drawPoints;
                 break; 
             case 'Shift':
+                //spawnar part
+                break;
+
         }
-    })
+    });
     
     canvas.addEventListener("mousedown", function(event) {
     });
@@ -89,10 +96,12 @@ function main(shaders)
     canvas.addEventListener("mousemove", function(event) {
         const p = getCursorPosition(canvas, event);
 
+        currentMouse = getCursorPosition(canvas,event);
         console.log(p);
     });
 
     canvas.addEventListener("mouseup", function(event) {
+        
     })
 
     
@@ -160,6 +169,7 @@ function main(shaders)
 
     function animate(timestamp)
     {
+
         let deltaTime = 0;
 
         if(time === undefined) {        // First time
@@ -199,6 +209,9 @@ function main(shaders)
         const vAge = gl.getAttribLocation(updateProgram, "vAge");
         const vLife = gl.getAttribLocation(updateProgram, "vLife");
         const vVelocity = gl.getAttribLocation(updateProgram, "vVelocity");
+
+        const originPosition = gl.getUniformLocation(updateProgram,"originPosition");
+        gl.uniform2fv(originPosition,currentMouse);
         
 
         gl.bindBuffer(gl.ARRAY_BUFFER, inParticlesBuffer);
@@ -252,6 +265,7 @@ function main(shaders)
 
         const uScale = gl.getUniformLocation(renderProgram, "uScale");
         gl.uniform2f(uScale, 1.5, 1.5*canvas.height/canvas.width);
+
 
         // Setup attributes
         const vPosition = gl.getAttribLocation(renderProgram, "vPosition");
