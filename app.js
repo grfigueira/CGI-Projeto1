@@ -19,6 +19,9 @@ let originParticles = vec2(0.0, 0.0);
 let vMin = 0.1;
 let vMax = 0.2;
 
+let aAlpha = 0; 
+let aBeta = Math.PI*2;
+
 let vLifeMin = 2;
 let vLifeMax = 10;
 
@@ -70,12 +73,18 @@ function main(shaders)
             case "PageDown":
                 break;
             case "ArrowUp":
+                if (aBeta > -Math.PI*2)
+                    aBeta-= Math.PI/30;
                 break;
             case "ArrowDown":
+                if (aBeta < Math.PI*2)
+                    aBeta+= Math.PI/30;
                 break;
             case "ArrowLeft":
+                aAlpha+= Math.PI/30;
                 break;
             case "ArrowRight":
+                aAlpha-= Math.PI/30;
                 break;
             case 'q':
                 if(vLifeMin < 19 && vLifeMin != vLifeMax)
@@ -198,8 +207,10 @@ function main(shaders)
 
     function animate(timestamp)
     {
-        //console.log("Max life : " + vLifeMax);
-        //console.log("Min life : " + vLifeMin);
+        console.log("Max life : " + vLifeMax);
+        console.log("Min life : " + vLifeMin);
+        console.log("Beta: " + aBeta);
+        console.log("Alpha: " + aAlpha);
 
         let deltaTime = 0;
 
@@ -253,6 +264,18 @@ function main(shaders)
         const randomNum = gl.getUniformLocation(updateProgram, "randomNum");
         gl.uniform1f(randomNum, Math.random()*deltaTime);
 
+        const uAlfa = gl.getUniformLocation(updateProgram, "uAlfa");
+        gl.uniform1f(uAlfa,aAlpha);
+        const uBeta = gl.getUniformLocation(updateProgram, "uBeta");
+        gl.uniform1f(uBeta,aBeta);
+
+        const uVelMin = gl.getUniformLocation(updateProgram, "uVelMin");
+        gl.uniform1f(uVelMin,vMin);
+        const uVelMax = gl.getUniformLocation(updateProgram, "uVelMax");
+        gl.uniform1f(uVelMax,vMax);
+
+
+
         
 
         gl.bindBuffer(gl.ARRAY_BUFFER, inParticlesBuffer);
@@ -290,8 +313,8 @@ function main(shaders)
         const uScale = gl.getUniformLocation(fieldProgram, "uScale");
         gl.uniform2f(uScale, 1.5, 1.5*canvas.height/canvas.width);
 
-        const uPlanets = gl.getUniformLocation(fieldProgram, "uPlanets");
-        gl.uniform3f(uPlanets, planets)
+       // const uPlanets = gl.getUniformLocation(fieldProgram, "uPlanets");
+        //gl.uniform3f(uPlanets, planets)
 
         // Setup attributes
         const vPosition = gl.getAttribLocation(fieldProgram, "vPosition"); 

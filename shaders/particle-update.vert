@@ -24,6 +24,13 @@ uniform float maxLife;
 uniform float minLife;
 uniform float randomNum;
 
+uniform float uAlfa;
+uniform float uBeta;
+
+uniform float uVelMax;
+uniform float uVelMin;
+
+
 // generates a pseudo random number that is a function of the argument. The argument needs to be constantly changing from call to call to generate different results
 highp float rand(vec2 co)
 {
@@ -49,6 +56,11 @@ void main() {
       vAgeOut = 0.0;
       vLifeOut = rand(vec2(randomNum,vLife)) * (maxLife - minLife) + minLife;
       vPositionOut = vec2(0.0,0.0) + originPosition;
+
+      float angle = uAlfa + rand(vec2(randomNum, rand(vec2(randomNum,vLife)))) * uBeta;
+      float velDif = uVelMax - uVelMin;
+      float currVel = uVelMin + rand(vec2(randomNum,vLife)) * velDif;
+      vVelocityOut = vec2(cos(angle) * currVel, sin(angle) * currVel);
    }
 
 }
