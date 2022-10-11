@@ -1,5 +1,5 @@
 import { buildProgramFromSources, loadShadersFromURLS, setupWebGL } from '../../libs/utils.js';
-import { vec2, flatten, subtract, dot } from '../../libs/MV.js';
+import { vec2, vec3, flatten, subtract, dot } from '../../libs/MV.js';
 
 // Buffers: particles before update, particles after update, quad vertices
 let inParticlesBuffer, outParticlesBuffer, quadBuffer;
@@ -22,7 +22,9 @@ let vMax = 0.2;
 let vLifeMin = 2;
 let vLifeMax = 10;
 
-
+let cursorPosInit = currentMouse;
+let cursorPosEnd = currentMouse;
+let planets = [];
 
 let time = undefined;
 
@@ -103,11 +105,9 @@ function main(shaders)
         }
     });
 
-    canvas.addEventListener("keyup", function(event){
-
-    });
 
     canvas.addEventListener("mousedown", function(event) {
+        cursorPosInit = getCursorPosition(canvas, event);
     });
 
     canvas.addEventListener("mousemove", function(event) {
@@ -120,9 +120,14 @@ function main(shaders)
     });
 
     canvas.addEventListener("mouseup", function(event) {
-        
+        cursorPosEnd = getCursorPosition(canvas, event);
+        console.log(distanceTwoPoints(cursorPosInit, cursorPosEnd));
+        addPlanet(distanceTwoPoints(cursorPosInit, cursorPosEnd));
     })
 
+    function distanceTwoPoints(p1, p2){
+        return Math.hypot(p2[0] - p1[0], p2[1] - p1[1]);
+    }
     
     function getCursorPosition(canvas, event) {
   
@@ -146,6 +151,10 @@ function main(shaders)
         gl.bindBuffer(gl.ARRAY_BUFFER, quadBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, flatten(vertices), gl.STATIC_DRAW);
 
+    }
+
+    function addPlanet(planetRadius){
+        planets.push(vec3(cursorPosInit, planetRadius));
     }
 
     function buildParticleSystem(nParticles) {
@@ -280,6 +289,10 @@ function main(shaders)
 
         const uScale = gl.getUniformLocation(fieldProgram, "uScale");
         gl.uniform2f(uScale, 1.5, 1.5*canvas.height/canvas.width);
+
+        const uPlanets = gl.getUniformLocation(fieldProgram, "uPlanets");
+        gl.uniform3f(uPlanets, planets)
+
         // Setup attributes
         const vPosition = gl.getAttribLocation(fieldProgram, "vPosition"); 
 
