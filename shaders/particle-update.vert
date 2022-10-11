@@ -20,6 +20,9 @@ varying vec2 vVelocityOut;
 
 //Uniforms
 uniform vec2 originPosition;
+uniform float maxLife;
+uniform float minLife;
+uniform vec2 randomVec;
 
 // generates a pseudo random number that is a function of the argument. The argument needs to be constantly changing from call to call to generate different results
 highp float rand(vec2 co)
@@ -44,6 +47,7 @@ void main() {
       
    if (vAgeOut >= vLife) {
       vAgeOut = 0.0;
+      vLifeOut = rand(randomVec) * (maxLife - minLife) + minLife;
       vPositionOut = vec2(0.0,0.0) + originPosition;
    }
 

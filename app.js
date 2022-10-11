@@ -19,6 +19,11 @@ let originParticles = vec2(0.0,0.0);
 let vMin = 0.1;
 let vMax = 0.2;
 
+let vLifeMin = 2;
+let vLifeMax = 10;
+
+
+
 let time = undefined;
 
 function main(shaders)
@@ -71,13 +76,20 @@ function main(shaders)
             case "ArrowRight":
                 break;
             case 'q':
+                if(vLifeMin < 19 && vLifeMin != vLifeMax)
+                    vLifeMin ++;
                 break;
             case 'a':
+                if (vLifeMin > 1)
+                    vLifeMin --;
                 break;
             case 'w':
+                if(vLifeMax < 20)
+                    vLifeMax ++;
                 break;
             case 's':
-                
+                if (vLifeMax > 2 && vLifeMax != vLifeMin)
+                    vLifeMax --;
                 break;
             case '0':
                 drawField = !drawField;
@@ -99,7 +111,7 @@ function main(shaders)
         const p = getCursorPosition(canvas, event);
 
         currentMouse = getCursorPosition(canvas,event);
-        console.log(p);
+       // console.log(p);
     });
 
     canvas.addEventListener("mouseup", function(event) {
@@ -145,7 +157,8 @@ function main(shaders)
             data.push(0.0);
 
             // life
-            const life = 5.0 + Math.random();
+            const life = Math.random() * 5;
+            //const life = Math.random() * (vLifeMax-vLifeMin) + vLifeMin;
             data.push(life);
 
             // velocity
@@ -171,6 +184,8 @@ function main(shaders)
 
     function animate(timestamp)
     {
+        console.log("Max life : " + vLifeMax);
+        console.log("Min life : " + vLifeMin);
 
         let deltaTime = 0;
 
@@ -214,9 +229,16 @@ function main(shaders)
 
 
         //Uniforms
-        console.log(originParticles);
         const originPosition = gl.getUniformLocation(updateProgram,"originPosition");
         gl.uniform2fv(originPosition,originParticles);
+
+        const maxLife = gl.getUniformLocation(updateProgram, "maxLife");
+        gl.uniform1f(maxLife,vLifeMax);
+        const minLife = gl.getUniformLocation(updateProgram, "minLife");
+        gl.uniform1f(minLife,vLifeMin);
+        const randomVec = gl.getUniformLocation(updateProgram, "randomVec");
+        gl.uniform2f(randomVec,Math.random()*deltaTime, Math.random()*deltaTime);
+
         
 
         gl.bindBuffer(gl.ARRAY_BUFFER, inParticlesBuffer);
