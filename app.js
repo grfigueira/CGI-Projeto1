@@ -236,8 +236,8 @@ function main(shaders)
         gl.uniform1f(maxLife,vLifeMax);
         const minLife = gl.getUniformLocation(updateProgram, "minLife");
         gl.uniform1f(minLife,vLifeMin);
-        const randomVec = gl.getUniformLocation(updateProgram, "randomVec");
-        gl.uniform2f(randomVec,Math.random()*deltaTime, Math.random()*deltaTime);
+        const randomNum = gl.getUniformLocation(updateProgram, "randomNum");
+        gl.uniform1f(randomNum, Math.random()*deltaTime);
 
         
 
