@@ -69,16 +69,27 @@ function main(shaders)
         console.log(event.key);
         switch(event.key) {
             case "PageUp":
+                if(event.shiftKey)
+                    if (vMax>vMin)
+                        vMin+=0.1;
+                else
+                    vMax+=0.1;
                 break;
             case "PageDown":
+                if(event.shiftKey)
+                    if(vMin>0.1)
+                        vMin-=0.1;
+                else
+                    if(vMax>vMin)
+                        vMax-=0.1;
                 break;
             case "ArrowUp":
-                if (aBeta > -Math.PI*2)
-                    aBeta-= Math.PI/30;
+                if (aBeta < Math.PI*2)
+                aBeta+= Math.PI/30;
                 break;
             case "ArrowDown":
-                if (aBeta < Math.PI*2)
-                    aBeta+= Math.PI/30;
+                if (aBeta > -Math.PI*2)
+                aBeta-= Math.PI/30;
                 break;
             case "ArrowLeft":
                 aAlpha+= Math.PI/30;
@@ -211,6 +222,8 @@ function main(shaders)
         console.log("Min life : " + vLifeMin);
         console.log("Beta: " + aBeta);
         console.log("Alpha: " + aAlpha);
+        console.log("vMax: " + vMax);
+        console.log("vMin: " + vMin);
 
         let deltaTime = 0;
 
