@@ -14,7 +14,7 @@ let drawField = true;
 
 
 let currentMouse = vec2(0.0, 0.0);
-let originParticles = vec2(0.0,0.0);
+let originParticles = vec2(0.0, 0.0);
 
 let vMin = 0.1;
 let vMax = 0.2;
@@ -98,18 +98,23 @@ function main(shaders)
                 drawPoints  = !drawPoints;
                 break; 
             case 'Shift':
-                originParticles = currentMouse;
                 break;
 
         }
     });
-    
+
+    canvas.addEventListener("keyup", function(event){
+
+    });
+
     canvas.addEventListener("mousedown", function(event) {
     });
 
     canvas.addEventListener("mousemove", function(event) {
         const p = getCursorPosition(canvas, event);
-
+        if(event.shiftKey){
+            originParticles = getCursorPosition(canvas,event);
+        }
         currentMouse = getCursorPosition(canvas,event);
        // console.log(p);
     });
@@ -184,8 +189,8 @@ function main(shaders)
 
     function animate(timestamp)
     {
-        console.log("Max life : " + vLifeMax);
-        console.log("Min life : " + vLifeMin);
+        //console.log("Max life : " + vLifeMax);
+        //console.log("Min life : " + vLifeMin);
 
         let deltaTime = 0;
 
