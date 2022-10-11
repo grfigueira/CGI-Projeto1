@@ -44,7 +44,7 @@ void main() {
       
    if (vAgeOut >= vLife) {
       vAgeOut = 0.0;
-      vPositionOut = originPosition;
+      vPositionOut = vec2(0.0,0.0) + originPosition;
    }
 
 }

@@ -14,6 +14,7 @@ let drawField = true;
 
 
 let currentMouse = vec2(0.0, 0.0);
+let originParticles = vec2(0.0,0.0);
 
 let vMin = 0.1;
 let vMax = 0.2;
@@ -76,6 +77,7 @@ function main(shaders)
             case 'w':
                 break;
             case 's':
+                
                 break;
             case '0':
                 drawField = !drawField;
@@ -84,7 +86,7 @@ function main(shaders)
                 drawPoints  = !drawPoints;
                 break; 
             case 'Shift':
-                //spawnar part
+                originParticles = currentMouse;
                 break;
 
         }
@@ -210,8 +212,11 @@ function main(shaders)
         const vLife = gl.getAttribLocation(updateProgram, "vLife");
         const vVelocity = gl.getAttribLocation(updateProgram, "vVelocity");
 
+
+        //Uniforms
+        console.log(originParticles);
         const originPosition = gl.getUniformLocation(updateProgram,"originPosition");
-        gl.uniform2fv(originPosition,currentMouse);
+        gl.uniform2fv(originPosition,originParticles);
         
 
         gl.bindBuffer(gl.ARRAY_BUFFER, inParticlesBuffer);
