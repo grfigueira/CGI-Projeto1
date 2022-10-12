@@ -54,12 +54,12 @@ void main() {
       
    if (vAgeOut >= vLife) {
       vAgeOut = 0.0;
-      vLifeOut = rand(vec2(randomNum,vLife)) * (maxLife - minLife) + minLife;
+      vLifeOut = rand(vec2(rand(vPosition),rand(vec2(randomNum,vLife)))) * (maxLife - minLife) + minLife;
       vPositionOut = vec2(0.0,0.0) + originPosition;
 
       float angle = uAlfa + rand(vec2(randomNum, rand(vec2(randomNum,vLife)))) * uBeta;
       float velDif = uVelMax - uVelMin;
-      float currVel = uVelMin + rand(vec2(randomNum,vLife)) * velDif;
+      float currVel = uVelMin + rand(vec2(rand(vec2(randomNum,vLife)),rand(vPosition))) * velDif;
       vVelocityOut = vec2(cos(angle) * currVel, sin(angle) * currVel);
    }
 

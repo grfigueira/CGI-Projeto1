@@ -88,7 +88,7 @@ function main(shaders)
                 aBeta+= Math.PI/30;
                 break;
             case "ArrowDown":
-                if (aBeta > -Math.PI*2)
+                if (aBeta > Math.PI/30)
                 aBeta-= Math.PI/30;
                 break;
             case "ArrowLeft":
