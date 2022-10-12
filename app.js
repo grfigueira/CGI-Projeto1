@@ -285,6 +285,14 @@ function main(shaders)
         const originPosition = gl.getUniformLocation(updateProgram,"originPosition");
         gl.uniform2fv(originPosition,originParticles);
 
+        for(let i = 0; i < planets.length; i++) {
+            const uPosition = gl.getUniformLocation(updateProgram, "uPosition[" + i + "]");
+            const uRadius = gl.getUniformLocation(updateProgram, "uRadius[" + i + "]");
+            let position = vec2(planets[i][0], planets[i][1]);
+            gl.uniform2fv(uPosition, position);
+            gl.uniform1f(uRadius, planets[i][2]);
+        }
+
         const maxLife = gl.getUniformLocation(updateProgram, "maxLife");
         gl.uniform1f(maxLife,vLifeMax);
         const minLife = gl.getUniformLocation(updateProgram, "minLife");

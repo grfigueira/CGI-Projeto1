@@ -1,5 +1,12 @@
 precision highp float;
 
+const int MAX_PLANETS = 10;
+const float PI = 3.14159;
+const float DENSITY = 5510.0;
+const float GRAVITY_CONST = 6.67 * pow(10.0, -11.0);
+const float PARTICLE_MASS = 1.0;
+const float R_e = 6.371 * pow(10.0, 6.0);
+
 /* Number of seconds (possibly fractional) that has passed since the last
    update step. */
 uniform float uDeltaTime;
@@ -30,6 +37,9 @@ uniform float uBeta;
 uniform float uVelMax;
 uniform float uVelMin;
 
+uniform float uRadius[MAX_PLANETS];
+uniform vec2 uPosition[MAX_PLANETS];
+
 
 // generates a pseudo random number that is a function of the argument. The argument needs to be constantly changing from call to call to generate different results
 highp float rand(vec2 co)
@@ -49,7 +59,19 @@ void main() {
    vAgeOut = vAge + uDeltaTime;
    vLifeOut = vLife;
 
-   vec2 accel = vec2(0.0);
+   vec2 net_fVector = vec2(0.0, 0.0);
+    for(int i = 0; i < MAX_PLANETS; i++){
+        if(uRadius[i] > 0.0){
+            vec2 forceVector = vec2(uPosition[i].x - vPosition.x, uPosition[i].y - vPosition.y);
+            float radius = uRadius[i] * R_e;
+            float planetMass = (4.0 * PI * radius * radius * radius * DENSITY) / 3.0;
+            float distance = sqrt(pow((vPosition.x * R_e - uPosition[i].x * R_e), 2.0) + pow((vPosition.y * R_e - uPosition[i].y * R_e), 2.0));
+            float force = (GRAVITY_CONST * planetMass * PARTICLE_MASS) / pow(distance, 2.0);
+            net_fVector += forceVector * force;
+        }
+    }
+
+   vec2 accel = net_fVector / PARTICLE_MASS;
    vVelocityOut = vVelocity + accel * uDeltaTime;
       
    if (vAgeOut >= vLife) {

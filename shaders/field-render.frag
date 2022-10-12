@@ -4,7 +4,7 @@ const int MAX_PLANETS = 10;
 const float PI = 3.14159;
 const float DENSITY = 5510.0;
 const float GRAVITY_CONST = 6.67 * pow(10.0, -11.0);
-const float PARTICLE_WEIGHT = 1.0;
+const float PARTICLE_MASS = 1.0;
 const float R_e = 6.371 * pow(10.0, 6.0);
 
 varying vec2 fPosition;
@@ -22,11 +22,11 @@ void main() {
     vec2 net_fVector = vec2(0.0, 0.0);
     for(int i = 0; i < MAX_PLANETS; i++){
         if(uRadius[i] > 0.0){
-            vec2 forceVector = vec2(fPosition.x - uPosition[i].x, fPosition.y - uPosition[i].y);
+            vec2 forceVector = vec2(uPosition[i].x - fPosition.x, uPosition[i].y - fPosition.y);
             float radius = uRadius[i] * R_e;
             float planetMass = (4.0 * PI * radius * radius * radius * DENSITY) / 3.0;
             float distance = sqrt(pow((fPosition.x * R_e - uPosition[i].x * R_e), 2.0) + pow((fPosition.y * R_e - uPosition[i].y * R_e), 2.0));
-            float force = (GRAVITY_CONST * planetMass * PARTICLE_WEIGHT) / pow(distance, 2.0);
+            float force = (GRAVITY_CONST * planetMass * PARTICLE_MASS) / pow(distance, 2.0);
             net_fVector += forceVector * force;
         }
     }
