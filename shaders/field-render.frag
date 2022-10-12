@@ -31,9 +31,7 @@ void main() {
         }
     }
     float angle = atan(net_fVector.y, net_fVector.x) / (2.0 * PI);
-    //gl_FragColor = vec4(mod(fPosition.x, 1.0), mod(fPosition.y, 1.0), 0.0, net_force);
     vec3 rgbColor = hsv2rgb(vec3(angle, 1.0, 1.0));
-    //gl_FragColor = vec4(rgbColor[0], rgbColor[1], rgbColor[2], net_force);
     float forceIntensity = sqrt((net_fVector.x * net_fVector.x) + (net_fVector.y*net_fVector.y));
     //if(mod(forceIntensity, 1.0) < 0.1) {forceIntensity = 0.0;}
     if(mod(forceIntensity, 1.0) < 0.1) {forceIntensity = 0.0;}

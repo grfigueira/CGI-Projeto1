@@ -29,6 +29,7 @@ let vLifeMax = 10;
 let cursorPosInit = currentMouse;
 let cursorPosEnd = currentMouse;
 let planets = [];
+let editingPlanet = false;
 
 let time = undefined;
 
@@ -70,19 +71,23 @@ function main(shaders)
         console.log(event.key);
         switch(event.key) {
             case "PageUp":
-                if(event.shiftKey)
+                if(event.shiftKey){
                     if (vMax>vMin)
                         vMin+=0.1;
-                else
+                }
+                else{
                     vMax+=0.1;
+                }
                 break;
             case "PageDown":
-                if(event.shiftKey)
+                if(event.shiftKey){
                     if(vMin>0.1)
                         vMin-=0.1;
-                else
+                }
+                else{
                     if(vMax>vMin)
                         vMax-=0.1;
+                }
                 break;
             case "ArrowUp":
                 if (aBeta < Math.PI*2)
@@ -129,6 +134,8 @@ function main(shaders)
 
     canvas.addEventListener("mousedown", function(event) {
         cursorPosInit = getCursorPosition(canvas, event);
+        addPlanet(distanceTwoPoints(cursorPosInit, cursorPosInit));
+        editingPlanet = true;
     });
 
     canvas.addEventListener("mousemove", function(event) {
@@ -136,14 +143,18 @@ function main(shaders)
         if(event.shiftKey){
             originParticles = getCursorPosition(canvas,event);
         }
+        if(editingPlanet){
+            cursorPosEnd = getCursorPosition(canvas, event);
+            planets[planets.length - 1][2] = distanceTwoPoints(cursorPosInit, cursorPosEnd);
+        }
         currentMouse = getCursorPosition(canvas,event);
        // console.log(p);
     });
 
     canvas.addEventListener("mouseup", function(event) {
+        editingPlanet = false;
         cursorPosEnd = getCursorPosition(canvas, event);
         console.log(distanceTwoPoints(cursorPosInit, cursorPosEnd));
-        addPlanet(distanceTwoPoints(cursorPosInit, cursorPosEnd));
     })
 
     function distanceTwoPoints(p1, p2){
@@ -329,15 +340,12 @@ function main(shaders)
 
         const uScale = gl.getUniformLocation(fieldProgram, "uScale");
         gl.uniform2f(uScale, 1.5, 1.5*canvas.height/canvas.width);
-
-        if(planets.length > 0){
-            for(let i = 0; i < planets.length; i++) {
-                const uPosition = gl.getUniformLocation(fieldProgram, "uPosition[" + i + "]");
-                const uRadius = gl.getUniformLocation(fieldProgram, "uRadius[" + i + "]");
-                let position = vec2(planets[i][0], planets[i][1]);
-                gl.uniform2fv(uPosition, position);
-                gl.uniform1f(uRadius, planets[i][2]);
-            }
+        for(let i = 0; i < planets.length; i++) {
+            const uPosition = gl.getUniformLocation(fieldProgram, "uPosition[" + i + "]");
+            const uRadius = gl.getUniformLocation(fieldProgram, "uRadius[" + i + "]");
+            let position = vec2(planets[i][0], planets[i][1]);
+            gl.uniform2fv(uPosition, position);
+            gl.uniform1f(uRadius, planets[i][2]);
         }
 
         // Setup attributes
