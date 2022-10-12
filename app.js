@@ -8,6 +8,7 @@ let inParticlesBuffer, outParticlesBuffer, quadBuffer;
 
 // Total number of particles
 const N_PARTICLES = 100000;
+const MAX_BODIES = 10;
 
 let drawPoints = true;
 let drawField = true;
@@ -175,6 +176,7 @@ function main(shaders)
 
     function addPlanet(planetRadius){
         planets.push(vec3(cursorPosInit, planetRadius));
+        console.log("Added planet " + planets);
     }
 
     function buildParticleSystem(nParticles) {
@@ -198,8 +200,10 @@ function main(shaders)
             // velocity
             let angle = Math.random() * 2.0 * Math.PI;
             let velocity = Math.random() * 0.15;
-            data.push(Math.cos(angle) * velocity);
-            data.push(Math.sin(angle) * velocity);
+            // data.push(Math.sin(angle) * velocity);
+            // data.push(Math.cos(angle) * velocity);
+            data.push(0.0);
+            data.push(0.0);
         }
 
         inParticlesBuffer = gl.createBuffer();
@@ -218,12 +222,12 @@ function main(shaders)
 
     function animate(timestamp)
     {
-        console.log("Max life : " + vLifeMax);
-        console.log("Min life : " + vLifeMin);
-        console.log("Beta: " + aBeta);
-        console.log("Alpha: " + aAlpha);
-        console.log("vMax: " + vMax);
-        console.log("vMin: " + vMin);
+        // console.log("Max life : " + vLifeMax);
+        // console.log("Min life : " + vLifeMin);
+        // console.log("Beta: " + aBeta);
+        // console.log("Alpha: " + aAlpha);
+        // console.log("vMax: " + vMax);
+        // console.log("vMin: " + vMin);
 
         let deltaTime = 0;
 
@@ -326,8 +330,15 @@ function main(shaders)
         const uScale = gl.getUniformLocation(fieldProgram, "uScale");
         gl.uniform2f(uScale, 1.5, 1.5*canvas.height/canvas.width);
 
-       // const uPlanets = gl.getUniformLocation(fieldProgram, "uPlanets");
-        //gl.uniform3f(uPlanets, planets)
+        if(planets.length > 0){
+            for(let i = 0; i < planets.length; i++) {
+                const uPosition = gl.getUniformLocation(fieldProgram, "uPosition[" + i + "]");
+                const uRadius = gl.getUniformLocation(fieldProgram, "uRadius[" + i + "]");
+                let position = vec2(planets[i][0], planets[i][1]);
+                gl.uniform2fv(uPosition, position);
+                gl.uniform1f(uRadius, planets[i][2]);
+            }
+        }
 
         // Setup attributes
         const vPosition = gl.getAttribLocation(fieldProgram, "vPosition"); 
