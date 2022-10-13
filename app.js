@@ -148,12 +148,12 @@ function main(shaders)
             planets[planets.length - 1][2] = distanceTwoPoints(cursorPosInit, cursorPosEnd);
         }
         currentMouse = getCursorPosition(canvas,event);
-       // console.log(p);
+        console.log(p);
     });
 
     canvas.addEventListener("mouseup", function(event) {
         editingPlanet = false;
-        cursorPosEnd = getCursorPosition(canvas, event);
+        //cursorPosEnd = getCursorPosition(canvas, event);
         console.log(distanceTwoPoints(cursorPosInit, cursorPosEnd));
     })
 
@@ -168,7 +168,7 @@ function main(shaders)
         const my = event.offsetY;
 
         const x = (((mx / canvas.width * 2) - 1)*1.5);
-        const y = (((canvas.height - my)/canvas.height * 2) -1);
+        const y = ((((canvas.height - my)/canvas.height * 2) -1) * (1.5 * (canvas.height / canvas.width)));
 
         return vec2(x,y);
     }
@@ -196,7 +196,7 @@ function main(shaders)
         for(let i=0; i<nParticles; ++i) {
             // position
             const x = Math.random() * 1.5 * 2 - 1.5
-            const y = Math.random() * 1.0 * 2 - 1.0;
+            const y = Math.random() * 1.5 * 2 - 1.5;
 
             data.push(x); data.push(y);
             
