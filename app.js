@@ -153,6 +153,10 @@ function main(shaders)
 
     canvas.addEventListener("mouseup", function(event) {
         editingPlanet = false;
+        // Remove planet if user didn't move mouse
+        if(planets[planets.length - 1][2] == 0.0){
+            planets.pop();
+        }
         //cursorPosEnd = getCursorPosition(canvas, event);
         console.log(distanceTwoPoints(cursorPosInit, cursorPosEnd));
     })
