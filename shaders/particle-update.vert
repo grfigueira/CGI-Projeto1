@@ -82,7 +82,7 @@ void main() {
       vLifeOut = rand(vec2(rand(vPosition),rand(vec2(vAge,vLife)))) * (maxLife - minLife) + minLife;
       vPositionOut = originPosition;
 
-      float angle = uAlfa + rand(vec2(vAge, rand(vec2(vAge,vLife)))) * 2.0 * uBeta - uBeta ;
+      float angle = uAlfa + rand(vec2(vAge, rand(vec2(vAge,vLifeOut)))) * 2.0 * uBeta - uBeta ;
 
       float velDif = uVelMax - uVelMin;
       float currVel = uVelMin + rand(vec2(rand(vec2(vAge,vLife)),rand(vPosition))) * velDif;

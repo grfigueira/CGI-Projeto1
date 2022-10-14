@@ -4,12 +4,31 @@ import { vec2, vec3, flatten, subtract, dot } from '../../libs/MV.js';
 // Buffers: particles before update, particles after update, quad vertices
 let inParticlesBuffer, outParticlesBuffer, quadBuffer;
 
-// Particle system constants
+//changes const
+
+const MIN_VELOCITY_CHANGE = 0.1;
+const MAX_VELOCITY_CHANGE = 0.1;
+const BETA_CHANGE = Math.PI/30;
+const ALPHA_CHANGE = Math.PI/30;
+const LIFE_MAX_CHANGE = 1.0;
+const LIFE_MIN_CHANGE = 1.0;
+
+
+const MAX_BETA = Math.PI;
+const MIN_BETA = -Math.PI;
+
+const MAX_LIFE_MINV = 2.0;
+const MAX_LIFE_MAXV = 20.0;
+const MIN_LIFE_MINV = 1.0;
+const MIN_LIFE_MAXV = 19.0;
+
 
 // Total number of particles
 const N_PARTICLES = 100000;
 const MAX_BODIES = 10;
 
+
+//initial values
 let drawPoints = true;
 let drawField = true;
 
@@ -73,51 +92,50 @@ function main(shaders)
             case "PageUp":
                 if(event.shiftKey){
                     if (vMax>vMin)
-                        vMin+=0.1;
+                        vMin+=MIN_VELOCITY_CHANGE;
                 }
                 else{
-                    vMax+=0.1;
+                    vMax+=MAX_VELOCITY_CHANGE;
                 }
                 break;
             case "PageDown":
                 if(event.shiftKey){
-                    if(vMin>0.1)
-                        vMin-=0.1;
+                    vMin-=MIN_VELOCITY_CHANGE;
                 }
                 else{
                     if(vMax>vMin)
-                        vMax-=0.1;
+                        vMax-=MAX_VELOCITY_CHANGE;
                 }
                 break;
             case "ArrowUp":
-                if (aBeta < Math.PI)
-                aBeta+= Math.PI/30;
+                if (aBeta < MAX_BETA)
+                aBeta+= BETA_CHANGE;
                 break;
             case "ArrowDown":
-                if (aBeta > Math.PI/30)
-                aBeta-= Math.PI/30;
+                if (aBeta > MIN_BETA)
+                aBeta-= BETA_CHANGE;
                 break;
             case "ArrowLeft":
-                aAlpha+= Math.PI/30;
+                aAlpha+= ALPHA_CHANGE;
                 break;
             case "ArrowRight":
-                aAlpha-= Math.PI/30;
+                aAlpha-= ALPHA_CHANGE;
                 break;
             case 'q':
-                if(vLifeMin < 19 && vLifeMin != vLifeMax)
-                    vLifeMin ++;
+                if(vLifeMin < MIN_LIFE_MAXV && vLifeMin != vLifeMax)
+                    vLifeMin += LIFE_MIN_CHANGE;
                 break;
             case 'a':
-                if (vLifeMin > 1)
-                    vLifeMin --;
+                if (vLifeMin > MIN_LIFE_MINV)
+                    vLifeMin -= LIFE_MIN_CHANGE;
                 break;
             case 'w':
-                if(vLifeMax < 20)
-                    vLifeMax ++;
+                if(vLifeMax < MAX_LIFE_MAXV)
+                    vLifeMax += LIFE_MAX_CHANGE;
                 break;
             case 's':
-                if (vLifeMax > 2 && vLifeMax != vLifeMin)
-                    vLifeMax --;
+                if (vLifeMax > MAX_LIFE_MINV && vLifeMax != vLifeMin)
+                    vLifeMax -= LIFE_MAX_CHANGE;
                 break;
             case '0':
                 drawField = !drawField;
@@ -133,9 +151,10 @@ function main(shaders)
 
 
     canvas.addEventListener("mousedown", function(event) {
+        if(planets.length<MAX_BODIES){
         cursorPosInit = getCursorPosition(canvas, event);
         addPlanet(distanceTwoPoints(cursorPosInit, cursorPosInit));
-        editingPlanet = true;
+        editingPlanet = true;}
     });
 
     canvas.addEventListener("mousemove", function(event) {
@@ -209,14 +228,9 @@ function main(shaders)
 
             // life
             const life = Math.random() * 5;
-            //const life = Math.random() * (vLifeMax-vLifeMin) + vLifeMin;
             data.push(life);
 
             // velocity
-            let angle = Math.random() * 2.0 * Math.PI;
-            let velocity = Math.random() * 0.15;
-            // data.push(Math.sin(angle) * velocity);
-            // data.push(Math.cos(angle) * velocity);
             data.push(0.0);
             data.push(0.0);
         }
@@ -237,12 +251,6 @@ function main(shaders)
 
     function animate(timestamp)
     {
-        // console.log("Max life : " + vLifeMax);
-        // console.log("Min life : " + vLifeMin);
-        // console.log("Beta: " + aBeta);
-        // console.log("Alpha: " + aAlpha);
-        // console.log("vMax: " + vMax);
-        // console.log("vMin: " + vMin);
 
         let deltaTime = 0;
 
