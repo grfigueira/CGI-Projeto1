@@ -61,6 +61,10 @@ void main() {
    vec2 net_fVector = vec2(0.0, 0.0);
     for(int i = 0; i < MAX_PLANETS; i++){
         if(uRadius[i] > 0.0){
+            if(pow((vPosition[0]- uPosition[i].x),2.0) + pow((vPosition[1] - uPosition[i].y),2.0) <= uRadius[i] * uRadius[i]){
+                vAgeOut = vLife;
+                break;
+                }
             vec2 forceVector = vec2(uPosition[i].x - vPosition.x, uPosition[i].y - vPosition.y);
             float radius = uRadius[i] * R_e;
             float planetMass = (4.0 * PI * radius * radius * radius * DENSITY) / 3.0;

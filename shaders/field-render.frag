@@ -22,7 +22,7 @@ void main() {
     vec2 net_fVector = vec2(0.0, 0.0);
     for(int i = 0; i < MAX_PLANETS; i++){
         if(uRadius[i] > 0.0){
-            vec2 forceVector = vec2(uPosition[i].x - fPosition.x, uPosition[i].y - fPosition.y);
+            vec2 forceVector = normalize(vec2(uPosition[i].x - fPosition.x, uPosition[i].y - fPosition.y));
             float distance = sqrt(pow((fPosition.x * R_e - uPosition[i].x * R_e), 2.0) + pow((fPosition.y * R_e - uPosition[i].y * R_e), 2.0));
             float radius = uRadius[i] * R_e;
             if(distance < radius){
