@@ -23,9 +23,12 @@ void main() {
     for(int i = 0; i < MAX_PLANETS; i++){
         if(uRadius[i] > 0.0){
             vec2 forceVector = vec2(uPosition[i].x - fPosition.x, uPosition[i].y - fPosition.y);
-            float radius = uRadius[i] * R_e;
-            float planetMass = (4.0 * PI * radius * radius * radius * DENSITY) / 3.0;
             float distance = sqrt(pow((fPosition.x * R_e - uPosition[i].x * R_e), 2.0) + pow((fPosition.y * R_e - uPosition[i].y * R_e), 2.0));
+            float radius = uRadius[i] * R_e;
+            if(distance < radius){
+                radius = distance;
+            }
+            float planetMass = (4.0 * PI * radius * radius * radius * DENSITY) / 3.0;
             float force = (GRAVITY_CONST * planetMass * PARTICLE_MASS) / pow(distance, 2.0);
             net_fVector += forceVector * force;
         }
@@ -33,6 +36,7 @@ void main() {
     float angle = atan(net_fVector.y, net_fVector.x) / (2.0 * PI);
     vec3 rgbColor = hsv2rgb(vec3(angle, 1.0, 1.0));
     float forceIntensity = sqrt((net_fVector.x * net_fVector.x) + (net_fVector.y*net_fVector.y));
-    if(mod(forceIntensity, 1.0) < 0.1) {forceIntensity = 0.0;}
-    gl_FragColor = vec4(rgbColor[0], rgbColor[1], rgbColor[2], forceIntensity / 10.0);
+    if(mod(log(forceIntensity) * 2.0, 1.0) < 0.1) {forceIntensity = 0.0;}
+    //if(mod(log(forceIntensity) * 1.2, 0.4) < 0.08) {forceIntensity = 0.0;}
+    gl_FragColor = vec4(rgbColor, forceIntensity);
 }
