@@ -8,14 +8,14 @@ let inParticlesBuffer, outParticlesBuffer, quadBuffer;
 
 const MIN_VELOCITY_CHANGE = 0.1;
 const MAX_VELOCITY_CHANGE = 0.1;
-const BETA_CHANGE = Math.PI/30;
-const ALPHA_CHANGE = Math.PI/30;
+const BETA_CHANGE = Math.PI/50;
+const ALPHA_CHANGE = Math.PI/50;
 const LIFE_MAX_CHANGE = 1.0;
 const LIFE_MIN_CHANGE = 1.0;
 
 
 const MAX_BETA = Math.PI;
-const MIN_BETA = -Math.PI;
+const MIN_BETA = 0;
 
 const MAX_LIFE_MINV = 2.0;
 const MAX_LIFE_MAXV = 20.0;
@@ -25,6 +25,7 @@ const MIN_LIFE_MAXV = 19.0;
 
 // Total number of particles
 const N_PARTICLES = 100000;
+//Total number of planets
 const MAX_BODIES = 10;
 
 
@@ -176,7 +177,6 @@ function main(shaders)
         if(planets[planets.length - 1][2] == 0.0){
             planets.pop();
         }
-        //cursorPosEnd = getCursorPosition(canvas, event);
         console.log(distanceTwoPoints(cursorPosInit, cursorPosEnd));
     })
 
@@ -310,19 +310,15 @@ function main(shaders)
         const minLife = gl.getUniformLocation(updateProgram, "minLife");
         gl.uniform1f(minLife,vLifeMin);
 
-        const uAlfa = gl.getUniformLocation(updateProgram, "uAlfa");
-        gl.uniform1f(uAlfa,aAlpha);
+        const uAlpha = gl.getUniformLocation(updateProgram, "uAlpha");
+        gl.uniform1f(uAlpha,aAlpha);
         const uBeta = gl.getUniformLocation(updateProgram, "uBeta");
         gl.uniform1f(uBeta,aBeta);
 
         const uVelMin = gl.getUniformLocation(updateProgram, "uVelMin");
         gl.uniform1f(uVelMin,vMin);
         const uVelMax = gl.getUniformLocation(updateProgram, "uVelMax");
-        gl.uniform1f(uVelMax,vMax);
-
-
-
-        
+        gl.uniform1f(uVelMax,vMax);       
 
         gl.bindBuffer(gl.ARRAY_BUFFER, inParticlesBuffer);
         

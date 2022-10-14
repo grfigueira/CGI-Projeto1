@@ -30,7 +30,7 @@ uniform vec2 originPosition;
 uniform float maxLife;
 uniform float minLife;
 
-uniform float uAlfa;
+uniform float uAlpha;
 uniform float uBeta;
 
 uniform float uVelMax;
@@ -51,13 +51,14 @@ highp float rand(vec2 co)
     return fract(sin(sn) * c);
 }
 
-void main() {
+/**
+    Calculates net force vector.
 
-   /* Update parameters according to our simple rules.*/
-   vPositionOut = vPosition + vVelocity * uDeltaTime;
-   vAgeOut = vAge + uDeltaTime;
-   vLifeOut = vLife;
+    return vec2
+**/
 
+vec2 calculateNet(){
+    
    vec2 net_fVector = vec2(0.0, 0.0);
     for(int i = 0; i < MAX_PLANETS; i++){
         if(uRadius[i] > 0.0){
@@ -73,19 +74,34 @@ void main() {
             net_fVector += forceVector * force;
         }
     }
+    return net_fVector;
+
+}
+
+void main() {
+
+   /* Update parameters according to our simple rules.*/
+   vPositionOut = vPosition + vVelocity * uDeltaTime;
+   vAgeOut = vAge + uDeltaTime;
+   vLifeOut = vLife;
+
+   vec2 net_fVector = calculateNet();
 
    vec2 accel = net_fVector / PARTICLE_MASS;
    vVelocityOut = vVelocity + accel * uDeltaTime;
       
    if (vAgeOut >= vLife) {
       vAgeOut = 0.0;
-      vLifeOut = rand(vec2(rand(vPosition),rand(vec2(vAge,vLife)))) * (maxLife - minLife) + minLife;
+      float randomNumLife = rand(vec2(rand(vPosition),rand(vec2(vAge,vLife))));
+      vLifeOut =  randomNumLife * (maxLife - minLife) + minLife;
       vPositionOut = originPosition;
+      
+      float randomNumAngle = rand(vec2(vAge, rand(vec2(vAge,vLifeOut))));
+      float angle = uAlpha + randomNumAngle * 2.0 * uBeta - uBeta ;
 
-      float angle = uAlfa + rand(vec2(vAge, rand(vec2(vAge,vLifeOut)))) * 2.0 * uBeta - uBeta ;
-
-      float velDif = uVelMax - uVelMin;
-      float currVel = uVelMin + rand(vec2(rand(vec2(vAge,vLife)),rand(vPosition))) * velDif;
+      float randomNumVel =  rand(vec2(rand(vec2(vAge,vLife)),rand(vPosition)));
+      float currVel = uVelMin + randomNumVel * (uVelMax - uVelMin);
+      
       vVelocityOut = vec2(cos(angle) * currVel, sin(angle) * currVel);
    }
 

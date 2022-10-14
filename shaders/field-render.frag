@@ -18,7 +18,7 @@ vec3 hsv2rgb(vec3 c)
     return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
 }
 
-void main() {
+vec2 calculateNet(){
     vec2 net_fVector = vec2(0.0, 0.0);
     for(int i = 0; i < MAX_PLANETS; i++){
         if(uRadius[i] > 0.0){
@@ -33,10 +33,16 @@ void main() {
             net_fVector += forceVector * force;
         }
     }
+    return net_fVector;
+
+}
+
+void main() {
+    vec2 net_fVector = calculateNet();
+
     float angle = atan(net_fVector.y, net_fVector.x) / (2.0 * PI);
     vec3 rgbColor = hsv2rgb(vec3(angle, 1.0, 1.0));
     float forceIntensity = sqrt((net_fVector.x * net_fVector.x) + (net_fVector.y*net_fVector.y));
     if(mod(log(forceIntensity) * 2.0, 1.0) < 0.1) {forceIntensity = 0.0;}
-    //if(mod(log(forceIntensity) * 1.2, 0.4) < 0.08) {forceIntensity = 0.0;}
     gl_FragColor = vec4(rgbColor, forceIntensity);
 }
