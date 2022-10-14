@@ -29,7 +29,6 @@ varying vec2 vVelocityOut;
 uniform vec2 originPosition;
 uniform float maxLife;
 uniform float minLife;
-uniform float randomNum;
 
 uniform float uAlfa;
 uniform float uBeta;
@@ -76,12 +75,13 @@ void main() {
       
    if (vAgeOut >= vLife) {
       vAgeOut = 0.0;
-      vLifeOut = rand(vec2(rand(vPosition),rand(vec2(randomNum,vLife)))) * (maxLife - minLife) + minLife;
+      vLifeOut = rand(vec2(rand(vPosition),rand(vec2(vAge,vLife)))) * (maxLife - minLife) + minLife;
       vPositionOut = originPosition;
 
-      float angle = uAlfa + rand(vec2(randomNum, rand(vec2(randomNum,vLife)))) * uBeta;
+      float angle = uAlfa + rand(vec2(vAge, rand(vec2(vAge,vLife)))) * 2.0 * uBeta - uBeta ;
+
       float velDif = uVelMax - uVelMin;
-      float currVel = uVelMin + rand(vec2(rand(vec2(randomNum,vLife)),rand(vPosition))) * velDif;
+      float currVel = uVelMin + rand(vec2(rand(vec2(vAge,vLife)),rand(vPosition))) * velDif;
       vVelocityOut = vec2(cos(angle) * currVel, sin(angle) * currVel);
    }
 

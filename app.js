@@ -21,7 +21,7 @@ let vMin = 0.1;
 let vMax = 0.2;
 
 let aAlpha = 0; 
-let aBeta = Math.PI*2;
+let aBeta = Math.PI;
 
 let vLifeMin = 2;
 let vLifeMax = 10;
@@ -90,7 +90,7 @@ function main(shaders)
                 }
                 break;
             case "ArrowUp":
-                if (aBeta < Math.PI*2)
+                if (aBeta < Math.PI)
                 aBeta+= Math.PI/30;
                 break;
             case "ArrowDown":
@@ -301,8 +301,6 @@ function main(shaders)
         gl.uniform1f(maxLife,vLifeMax);
         const minLife = gl.getUniformLocation(updateProgram, "minLife");
         gl.uniform1f(minLife,vLifeMin);
-        const randomNum = gl.getUniformLocation(updateProgram, "randomNum");
-        gl.uniform1f(randomNum, Math.random()*deltaTime);
 
         const uAlfa = gl.getUniformLocation(updateProgram, "uAlfa");
         gl.uniform1f(uAlfa,aAlpha);
