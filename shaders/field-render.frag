@@ -44,5 +44,5 @@ void main() {
     vec3 rgbColor = hsv2rgb(vec3(angle, 1.0, 1.0));
     float forceIntensity = sqrt((net_fVector.x * net_fVector.x) + (net_fVector.y*net_fVector.y));
     if(mod(log(forceIntensity) * 2.0, 1.0) < 0.1) {forceIntensity = 0.0;}
-    gl_FragColor = vec4(rgbColor, forceIntensity);
+    gl_FragColor = vec4(rgbColor, forceIntensity / 2.5);
 }

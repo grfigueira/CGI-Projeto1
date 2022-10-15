@@ -1,9 +1,9 @@
 precision mediump float;
 
 attribute vec2 vPosition;
-attribute float vAge;
-attribute float vLife;
-attribute vec2 vVelocity;
+//attribute float vAge;
+//attribute float vLife;
+//attribute vec2 vVelocity;
 uniform vec2 uScale;
 
 void main() {
