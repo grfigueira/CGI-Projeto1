@@ -2,7 +2,7 @@
 
 A WebGL program that simulates thousands of particles and their interaction with gravitational fields.
 
-Group project for the **Interactive Computer Graphics** class at FCT-UNL.
+Group project for the **Computer Graphics and Interfaces** class at FCT-UNL.
 
 ---
 
