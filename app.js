@@ -1,5 +1,5 @@
-import { buildProgramFromSources, loadShadersFromURLS, setupWebGL } from '../../libs/utils.js';
-import { vec2, vec3, flatten, subtract, dot } from '../../libs/MV.js';
+import { buildProgramFromSources, loadShadersFromURLS, setupWebGL } from '/libs/utils.js';
+import { vec2, vec3, flatten, subtract, dot } from '/libs/MV.js';
 
 // Buffers: particles before update, particles after update, quad vertices
 let inParticlesBuffer, outParticlesBuffer, quadBuffer;
